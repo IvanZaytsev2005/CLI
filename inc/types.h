@@ -23,6 +23,8 @@ typedef struct cli {
     uint8_t Ncmd;
 
     uint8_t* InputCnt;
+    
+    uint8_t* OutpuCnt;
 
     uint8_t LengthQuery;
 
