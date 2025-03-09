@@ -1,5 +1,4 @@
 #include "stdint.h"
-
 #define length_of_command 16
 #define num_of_params 10
 
@@ -24,18 +23,18 @@ typedef struct cli {
 
     uint8_t* InputCnt;
     
-    uint8_t* OutpuCnt;
+    uint8_t* OutputCnt;
 
-    uint8_t LengthQuery;
+    uint16_t LengthQuery;
 
     QueryType* query;//maybe this will counter to last query and i will store several last querys
 
 } CliType;
 
-enum state_cli {
+enum state_cli{
     echo = 1 << 0,
     num_contr = 1 << 1,//for moving smth by numbers
     busy = 1 << 2,
     echo_code = 1 << 3
-}state_cli;
+};
 
