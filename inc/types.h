@@ -5,7 +5,7 @@
 
 typedef struct cmd{
     uint8_t ComandDesignator[length_of_command];
-    uint8_t *(function) (int32_t *par);
+    uint8_t (*function) (int32_t *par);
 } CmdType;
 
 typedef struct query {
@@ -16,7 +16,7 @@ typedef struct query {
 typedef struct cli {
     CmdType* Cmds;
 
-    uint8_t *(transmit) (uint8_t* data_out, uint8_t Len);
+    uint8_t (*transmit) (uint8_t* data_out, uint8_t Len);
 
     uint16_t flag;
 
