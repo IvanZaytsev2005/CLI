@@ -1,5 +1,6 @@
 #include "cli.h"
 #include "stdint.h"
+#include <stdarg.h>
 
 
 const uint8_t NewLine[4] = {"--> "};
@@ -145,3 +146,34 @@ uint8_t strcmp(uint8_t* a, uint8_t* b) {
     return(1);
 }
 
+void print(CliType*cli, const uint8_t* str, ...) {
+    uint16_t N = 0;
+    int d; 
+    double f;
+    va_list factor;
+    va_start(factor, str);
+    for(char *c = str; *c; c++)
+    {
+        if(*c!='%')
+        {
+            N += sprintf(cli->OutputCnt + N, "%c", *c);
+            continue;
+        }
+        switch(*++c)    // если символ - %, то переходим к следующему символу
+        {
+            case 'd': 
+                d = va_arg(factor, int);
+                N += sprintf(cli->OutputCnt + N,"%d", d);
+                break;
+            case 'f': 
+                f = va_arg(factor, double);
+                N += sprintf(cli->OutputCnt + N, "%f", f);
+                break;
+            default:
+                N += sprintf(cli->OutputCnt + N, "%c", *c);
+        }
+    }
+    va_end(factor);
+    N += sprintf(cli->OutputCnt + N, "\n\r");
+    cli->transmit(cli->OutputCnt, N);
+}
