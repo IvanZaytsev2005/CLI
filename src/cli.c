@@ -1,6 +1,7 @@
 #include "cli.h"
 #include "stdint.h"
 #include <stdarg.h>
+#include "stdio.h"
 
 
 const uint8_t NewLine[4] = {"--> "};
@@ -24,6 +25,9 @@ uint8_t ProcessingInputData(CliType* cli, uint8_t data)
             if(count > 0) {
                 count--;
             }
+            cli->transmit(&data, 1);
+            lenght = sprintf(cli->OutputCnt, " ");
+            cli->transmit(cli->OutputCnt, lenght);
             cli->transmit(&data, 1);
             break;
         default:
@@ -127,7 +131,7 @@ uint8_t FindFunc(CliType* cli)
         DesigCount = cli->Cmds[i].ComandDesignator;
         // cli->transmit(DesigCount, 16);
         // cli->transmit(ComCount, 16);   
-        if(strcmp(DesigCount, ComCount) == 1)
+        if(my_strcmp(DesigCount, ComCount) == 1)
         {
             return(i);
         }
@@ -135,7 +139,7 @@ uint8_t FindFunc(CliType* cli)
     return(0);
 }
 
-uint8_t strcmp(uint8_t* a, uint8_t* b) {
+uint8_t my_strcmp(uint8_t* a, uint8_t* b) {
     uint8_t i=0;
     while(i<16) {
         if(a[i] != b[i]) {
