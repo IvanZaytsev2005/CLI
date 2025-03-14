@@ -22,9 +22,8 @@
     ```  
 5. Определить массив типа CmdType, содеражащий дескрипторы команд (длиной не более length_of_command 16 символов) и заголовки соответствующих функций. Пример:
     ```c
-    #define NumComs 3
-    CmdType cmd[NumComs] = {{"nop", Nop}//the zero function
-                        ,{"led", Led}
+    #define NumComs 2
+    CmdType cmd[NumComs] = {{"led", Led}
                         ,{"hello", HelloWorld}
     };
     ```
@@ -52,21 +51,15 @@
     ```
 7. по приему байта вызывать ProcessingInputData(uint8_t data), где data - полученный байт
 8. В основном цикле проверять состояние флага busy переменной cli.flag. Данный флаг устанавливается при приеме строки. После появления данного флага необходимо вызвать функцию CMDProcessing(&cli), которая выполнит функцию, соответствующей принятой команде.
-```c
-  while (1)
-  {
-    if((cli.flag & busy) != 0) {
-      CMDProcessing(&cli);
-      cli.flag &= ~busy;
-    }
-  }
-```
-Если была получена строка, содержащая неопределенную команду (в том числе пустая строка), выполняется нулевая функция (рекомендуется оставить пустой).
-```c
-uint8_t Nop(int32_t* Pars) {
-  return;
-}
-```
+    ```c
+      while (1)
+      {
+        if((cli.flag & busy) != 0) {
+          CMDProcessing(&cli);
+          cli.flag &= ~busy;
+        }
+      }
+    ```
 
 ## Описание структуры CliType:
     cli.transmite - наименование функции отправки N байт.  

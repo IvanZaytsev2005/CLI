@@ -108,12 +108,14 @@ void CMDProcessing(CliType* cli)
     //     data = *InputLineCounter;
     // }
     // Params[count_params] = Params[count_params]*sign;
-    uint8_t num;
+    int8_t num;
     num = FindFunc(cli);
     // uint8_t N;
     // N = sprintf(cli->OutputCnt," %d \n", num);
     // cli->transmit(cli->OutputCnt, N);
-    cli->Cmds[num].function(cli->query->params);
+    if(num > -1) {
+        cli->Cmds[num].function(cli->query->params);
+    }
     cli->transmit(NewLine, 4);
     for(uint16_t i = 0; i < cli->LengthQuery; i++)
     {
@@ -121,22 +123,22 @@ void CMDProcessing(CliType* cli)
     }
 }
 
-uint8_t FindFunc(CliType* cli)
+int8_t FindFunc(CliType* cli)
 {
     uint8_t* DesigCount;
     uint8_t* ComCount;
     ComCount = cli->query->command;
-    for(uint8_t i = 1; i < cli->Ncmd; i++)
+    for(uint8_t i = 0; i < cli->Ncmd; i++)
     {
         DesigCount = cli->Cmds[i].ComandDesignator;
         // cli->transmit(DesigCount, 16);
         // cli->transmit(ComCount, 16);   
         if(my_strcmp(DesigCount, ComCount) == 1)
         {
-            return(i);
+            return((int8_t)i);
         }
     }
-    return(0);
+    return(-1);
 }
 
 uint8_t my_strcmp(uint8_t* a, uint8_t* b) {
