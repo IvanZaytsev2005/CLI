@@ -13,15 +13,19 @@ uint8_t ProcessingInputData(CliType* cli, uint8_t data)
     uint8_t lenght;
     switch (data)
     {
+        case '\n':
+        case '\0':
         case '\r':
             cli->InputCnt[count] = data;
             count = 0;
             cli->flag |= busy;
-            lenght = sprintf(cli->OutputCnt, "\n\r");
-            cli->transmit(cli->OutputCnt, lenght);
+            if((cli->flag & echo) != 0){
+                lenght = sprintf(cli->OutputCnt, "\n\r");
+                cli->transmit(cli->OutputCnt, lenght);
+            }
             return (1);
             break;
-        case 8:
+        case 8://backspace
             if(count > 0) {
                 count--;
             }
@@ -80,43 +84,15 @@ void CMDProcessing(CliType* cli)
         }
         count_params++;
     }
-    
-    // int8_t sign = 1;
-    // Params[0] = 0;
-    // while (data!='\r')
-    // {
-    //     if(data == ' ')
-    //     {
-    //         Params[count_params] = Params[count_params]*sign;
-    //         sign = 1;
-    //         count_params++;
-    //         Params[count_params] = 0;
-    //     }
-    //     else
-    //     {
-    //         if(data == '-')
-    //         {
-    //             sign = -1;
-    //         }
-    //         else
-    //         {
-    //             Params[count_params] = Params[count_params]*10;
-    //             Params[count_params] += (data & (~0x30));
-    //         }
-    //     }
-    //     InputLineCounter++;
-    //     data = *InputLineCounter;
-    // }
-    // Params[count_params] = Params[count_params]*sign;
+
     int8_t num;
     num = FindFunc(cli);
-    // uint8_t N;
-    // N = sprintf(cli->OutputCnt," %d \n", num);
-    // cli->transmit(cli->OutputCnt, N);
     if(num > -1) {
         cli->Cmds[num].function(cli->query->params);
     }
-    cli->transmit(NewLine, 4);
+    if((cli->flag & echo) != 0){
+        cli->transmit(NewLine, 4);
+    }
     for(uint16_t i = 0; i < cli->LengthQuery; i++)
     {
         cli->InputCnt[i] = 0;
