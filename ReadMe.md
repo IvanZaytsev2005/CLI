@@ -11,8 +11,9 @@
     ```c
     CliType cli;
     QueryType query;
-    uint8_t BufIn[256];
-    uint8_t BufOut[256];
+    uint8_t DataInput[256];
+    uint8_t DataOutput[256];
+    uint8_t DataInUart;//переменная для приема байта по UART
     ```
 4. Определить функцию отправки данных. Например:
     ```c
@@ -49,7 +50,17 @@
     cli.LengthQuery = 256;
     cli.Ncmd = NumComs;
     ```
-7. по приему байта вызывать ProcessingInputData(uint8_t data), где data - полученный байт
+7. по приему байта вызывать ProcessingInputData(uint8_t data), где data - полученный байт. Например
+```c
+HAL_UART_Receive_IT(&huart1, &DataUartIn, 1);
+
+void HAL_UART_RxCpltCallback (UART_HandleTypeDef * huart) {
+  //if(huart->Instance == USART1) {
+    ProcessingInputData(&cli, DataUartIn);
+    HAL_UART_Receive_IT(&huart1, &DataUartIn, 1);
+  //}
+}
+```
 8. В основном цикле проверять состояние флага busy переменной cli.flag. Данный флаг устанавливается при приеме строки. После появления данного флага необходимо вызвать функцию CMDProcessing(&cli), которая выполнит функцию, соответствующей принятой команде.
     ```c
       while (1)
