@@ -23,8 +23,7 @@
     ```  
 5. Определить массив типа CmdType, содеражащий дескрипторы команд (длиной не более length_of_command 16 символов) и заголовки соответствующих функций. Пример:
     ```c
-    #define NumComs 2
-    CmdType cmd[NumComs] = {{"led", Led}
+    CmdType cmd[] = {{"led", Led}
                         ,{"hello", HelloWorld}
     };
     ```
@@ -48,7 +47,6 @@
     cli.flag |= echo;
     cli.query = &query;
     cli.LengthQuery = 256;
-    cli.Ncmd = NumComs;
     ```
 7. по приему байта вызывать ProcessingInputData(uint8_t data), где data - полученный байт. Например
 ```c
