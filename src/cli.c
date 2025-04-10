@@ -106,7 +106,7 @@ int8_t FindFunc(CliType* cli)
     ComCount = cli->query->command;
     uint8_t StopString[16];
     sprintf(StopString, "_stop_string_");
-    for(uint16_t i = 0; i < 0xFFFF; i++)
+    for(uint16_t i = 0; i < cli->Ncmd; i++)
     {
         DesigCount = cli->Cmds[i].ComandDesignator;
         // cli->transmit(DesigCount, 16);
