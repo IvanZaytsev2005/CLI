@@ -155,7 +155,7 @@ void print(CliType*cli, const uint8_t* str, ...) {
                 break;
             case 'f': 
                 f = va_arg(factor, double);
-                N += sprintf(cli->OutputCnt + N, "%f", f);
+                N += sprintf(cli->OutputCnt + N, "%d", (int32_t)(f*1000));
                 break;
             default:
                 N += sprintf(cli->OutputCnt + N, "%c", *c);
