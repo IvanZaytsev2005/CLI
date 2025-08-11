@@ -47,6 +47,7 @@
     cli.flag |= echo;
     cli.query = &query;
     cli.LengthQuery = 256;
+    cli.Ncmd = sizeof(cmd) / sizeof(cmd[0]);
     ```
 7. по приему байта вызывать ProcessingInputData(uint8_t data), где data - полученный байт. Например
 ```c
