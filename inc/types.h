@@ -17,6 +17,12 @@ typedef struct cli {
 
     uint8_t (*transmit) (uint8_t* data_out, uint8_t Len);
 
+    void (*func_frwd) ();
+    void (*func_bcwd) ();
+    void (*func_left) ();
+    void (*func_right) ();
+    void (*func_stop) ();
+
     uint16_t flag;
 
     uint8_t Ncmd;
@@ -35,6 +41,7 @@ enum state_cli{
     echo = 1 << 0,
     num_contr = 1 << 1,//for moving smth by numbers
     busy = 1 << 2,
-    echo_code = 1 << 3
+    echo_code = 1 << 3,
+    logs = 1 << 4
 };
 

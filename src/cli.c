@@ -47,6 +47,35 @@ uint8_t ProcessingInputData(CliType* cli, uint8_t data)
             count++;
             break;
     }
+    if((cli->flag & num_contr) != 0){
+        switch(data) {
+            case '8':
+                cli->func_frwd();
+                cli->InputCnt[count] = data;
+                count = 0;
+                break;
+            case '2':
+                cli->func_bcwd();
+                cli->InputCnt[count] = data;
+                count = 0;
+                break;
+            case '4':
+                cli->func_left();
+                cli->InputCnt[count] = data;
+                count = 0;
+                break;
+            case '6':
+                cli->func_right();
+                cli->InputCnt[count] = data;
+                count = 0;
+                break;
+            case '5':
+                cli->func_stop();
+                cli->InputCnt[count] = data;
+                count = 0;
+                break;                
+        }
+    }
     return(0);
 }
 
@@ -134,7 +163,10 @@ uint8_t my_strcmp(uint8_t* a, uint8_t* b) {
     return(1);
 }
 
-void print(CliType*cli, const uint8_t* str, ...) {
+void print(CliType*cli, uint8_t mode, const uint8_t* str, ...) {
+    if((mode == logs) & ((cli->flag & logs) == 0)) {
+        return;
+    }
     uint16_t N = 0;
     int d; 
     double f;
