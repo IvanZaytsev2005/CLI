@@ -42,6 +42,7 @@ enum state_cli{
     num_contr = 1 << 1,//for moving smth by numbers
     busy = 1 << 2,
     echo_code = 1 << 3,
-    logs = 1 << 4
+    logs = 1 << 4,
+    app = 0
 };
 
