@@ -13,7 +13,7 @@
     QueryType query;
     uint8_t DataInput[256];
     uint8_t DataOutput[256];
-    uint8_t DataInUart;//переменная для приема байта по UART
+    uint8_t DataUartIn;//переменная для приема байта по UART
     ```
 4. Определить функцию отправки данных. Например:
     ```c
