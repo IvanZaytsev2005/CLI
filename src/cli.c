@@ -167,6 +167,9 @@ void print(CliType*cli, uint8_t mode, const uint8_t* str, ...) {
     if((mode == logs) & ((cli->flag & logs) == 0)) {
         return;
     }
+    if((mode == comp) & ((cli->flag & comp) == 0)) {
+        return;
+    }
     uint16_t N = 0;
     int d; 
     double f;
