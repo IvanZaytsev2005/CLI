@@ -11,6 +11,15 @@ uint8_t ProcessingInputData(CliType* cli, uint8_t data)
     static uint8_t count;
     int32_t par[3];
     uint8_t lenght;
+    if((cli->flag & servo) != 0) {
+        cli->InputCnt[count] = data;
+        count++;
+        if(count >= 8){
+            count = 0;
+            cli->flag |= busy;
+        }
+        return(0);
+    }
     switch (data)
     {
         case '\n':
@@ -128,6 +137,26 @@ void CMDProcessing(CliType* cli)
     }
 }
 
+void CMDProcessingServo(CliType *cli) {
+    uint8_t DesigCount;
+    uint8_t ComCount = cli->InputCnt[2];
+    int8_t *ParCount = cli->InputCnt + 3;
+    int32_t Param = *ParCount;
+
+    for(uint16_t i = 0; i < cli->Ncmd; i++)
+    {
+        DesigCount = cli->Cmds[i].ComandDesignator[0];
+        // cli->transmit(DesigCount, 16);
+        // cli->transmit(ComCount, 16);   
+        if(DesigCount == ComCount)
+        {
+            cli->Cmds[i].function(&Param);
+            exit(0);
+        }
+    }
+
+}
+
 int8_t FindFunc(CliType* cli)
 {
     uint8_t* DesigCount;
@@ -196,4 +225,26 @@ void print(CliType*cli, uint8_t mode, const uint8_t* str, ...) {
     va_end(factor);
     N += sprintf(cli->OutputCnt + N, "\n\r");
     cli->transmit(cli->OutputCnt, N);
+}
+
+void Send(CliType *cli, uint8_t TypeCommand, int32_t* Data){
+    uint8_t *Count8;
+    Count8 = Data;
+    cli->OutputCnt[0] = 0xFF;
+    cli->OutputCnt[1] = 0xFF;
+    cli->OutputCnt[2] = TypeCommand;
+    cli->OutputCnt[3] = Count8[0];
+    cli->OutputCnt[4] = Count8[1];
+    cli->OutputCnt[5] = Count8[2];
+    cli->OutputCnt[6] = Count8[3];
+    cli->OutputCnt[7] = Crc(cli->OutputCnt);
+    cli->transmit(cli->OutputCnt, 8);
+}
+
+uint8_t Crc(uint8_t *Count) {
+    uint8_t sum = 0;
+    for(uint8_t i = 0; i < 8; i++) {
+        sum += Count[i];
+    }
+    return((uint8_t)(~(sum & 0xFF)));
 }

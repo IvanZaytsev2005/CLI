@@ -43,6 +43,10 @@ enum state_cli{
     busy = 1 << 2,
     echo_code = 1 << 3,
     logs = 1 << 4,
+    servo = 1 << 5,
     app = 0
 };
 
+enum CommandServo{
+    SetPos = 0xAA
+};
